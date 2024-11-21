@@ -84,7 +84,7 @@ header {
     height: 361px;
     border-radius: 37px;
     background: linear-gradient(360deg, #363738 0%, #141414 100%);
-    border: 1px solid rgba(64, 65, 66, 0.5);
+    border: 1px solid rgba(64, 65, 66, 67);
     transition: 0.5s ease;
     position: relative;
 }
@@ -172,7 +172,7 @@ header {
     height: 233px;
     border-radius: 40px;
     background: linear-gradient(360deg, #363738 0%, #141414 100%);
-    border: 2px solid rgba(64, 65, 66, 0.5);
+    border: 2px solid rgba(64, 65, 66, 67);
     transition: 0.5s ease;
 }
 .d12:hover {
@@ -242,7 +242,7 @@ header {
     width: 400px;
     height: 327px;
     border-radius: 40px;
-    border: 2px solid rgba(64, 65, 66, 0.5);
+    border: 2px solid rgba(64, 65, 66, 67);
     background: linear-gradient(360deg, #363738 0%, #141414 100%);
 }
 .d22{
