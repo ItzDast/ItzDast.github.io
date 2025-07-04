@@ -1,54 +1,67 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Скин игрока фывMinecraft</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>Скин Minecraft по нику</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 40px; }
+    input, button { padding: 10px; font-size: 16px; }
+    .skin-container { position: relative; width: 150px; height: 150px; margin: auto; }
+    .layer-base, .layer-overlay { position: absolute; top: 0; left: 0; width: 150px; height: 150px; image-rendering: pixelated; }
+    img { margin: 15px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    .error { color: red; margin-top: 20px; }
+  </style>
 </head>
-<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen p-4">
+<body>
 
-  <h1 class="text-3xl font-bold mb-4">👤 Скин игрока Minecraft</h1>
+  <h1>Скин Minecraft</h1>
+  <input id="nickname" placeholder="Ник игрока">
+  <button onclick="loadSkin()">Показать</button>
 
-  <div class="flex flex-col items-center gap-3 w-full max-w-sm">
-    <input id="nickname" type="text" placeholder="Введите ник (например, ItzDast)"
-      class="w-full p-2 rounded text-black text-lg" />
+  <div class="error" id="error" style="display:none;"></div>
 
-    <button onclick="loadSkin()"
-      class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-white font-semibold">
-      Показать скин
-    </button>
-  </div>
-
-  <div id="result" class="mt-8 hidden text-center">
-    <h2 class="text-xl font-semibold mb-2">Результат:</h2>
-    <div class="flex flex-col gap-3 items-center">
-      <img id="avatar" src="" alt="2D голова" class="w-16 h-16 border rounded" />
-      <img id="head3d" src="" alt="3D голова" class="w-32 h-32" />
-      <img id="skin" src="" alt="Скин игрока" class="w-32 h-64 border" />
+  <div id="result" style="display:none;">
+    <p><b>UUID:</b> <span id="uuid"></span></p>
+    <div class="skin-container">
+      <img id="head-base" class="layer-base" src="">
+      <img id="head-overlay" class="layer-overlay" src="">
     </div>
+    <img id="body" src="" alt="Тело" width="200">
   </div>
 
   <script>
     async function loadSkin() {
-      const nick = document.getElementById("nickname").value.trim();
-      if (!nick) return alert("Введите ник!");
+      const nick = nickname.value.trim();
+      const error = document.getElementById("error");
+      const result = document.getElementById("result");
 
-      const res = await fetch(`https://api.mojang.com/users/profiles/minecraft/${nick}`);
-      if (!res.ok) {
-        alert("Игрок не найден!");
-        return;
+      error.style.display = "none";
+      result.style.display = "none";
+
+      if (!nick) return showError("Введите ник.");
+
+      try {
+        const r = await fetch(`https://corsproxy.io/?http://api.mojang.com/users/profiles/minecraft/${nick}`);
+        if (!r.ok) throw new Error("Ник не найден");
+        const data = await r.json();
+        const uuid = data.id;
+
+        uuidEl.textContent = uuid;
+        headBase.src = `https://crafatar.com/avatars/${uuid}?size=150&overlay=false`;
+        headOverlay.src = `https://crafatar.com/avatars/${uuid}?size=150&overlay=true`;
+        body.src = `https://crafatar.com/renders/body/${uuid}?scale=6`;
+
+        result.style.display = "block";
+      } catch (e) {
+        showError("Ошибка: " + e.message);
       }
 
-      const data = await res.json();
-      const uuid = data.id;
-
-      document.getElementById("avatar").src = `https://crafatar.com/avatars/${uuid}?size=64&overlay`;
-      document.getElementById("head3d").src = `https://visage.surgeplay.com/head/${uuid}.png`;
-      document.getElementById("skin").src = `https://visage.surgeplay.com/full/${uuid}.png`;
-
-      document.getElementById("result").classList.remove("hidden");
+      function showError(msg) {
+        error.textContent = msg;
+        error.style.display = "block";
+      }
     }
   </script>
+
 </body>
 </html>
