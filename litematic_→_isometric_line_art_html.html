@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Litematic Parser Test</title>
+</head>
+<body>
+  <h2>Litematic Parser Test</h2>
+  <input type="file" id="fileInput" accept=".litematic">
+  <pre id="log" style="white-space: pre-wrap; max-height: 400px; overflow: auto;"></pre>
+
+  <!-- Встроенный pako (inflate) -->
+  <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+
+  <!-- Встроенный nbt-js -->
+  <script src="https://cdn.jsdelivr.net/npm/nbt-js@1.0.4/dist/nbt.min.js"></script>
+
+  <script>
+    const log = document.getElementById('log');
+    const fileInput = document.getElementById('fileInput');
+
+    fileInput.addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      log.textContent = "Чтение файла...";
+      const arrayBuffer = await file.arrayBuffer();
+
+      // Распаковка gzip (Litematic обычно сжат)
+      let inflated;
+      try {
+        inflated = pako.ungzip(new Uint8Array(arrayBuffer));
+      } catch (err) {
+        // Если не gzipped, используем напрямую
+        inflated = new Uint8Array(arrayBuffer);
+      }
+
+      log.textContent = "Парсинг NBT...";
+
+      nbt.parse(inflated.buffer, (err, data) => {
+        if (err) {
+          log.textContent = "Ошибка парсинга: " + err;
+          return;
+        }
+
+        log.textContent = "NBT успешно распарсено!\n";
+
+        // root litematic обычно: { Metadata, Regions }
+        const root = data.parsed || data;
+        const regions = root.value?.Regions?.value || root.value?.Regions;
+
+        if (!regions) {
+          log.textContent += "Не найдено Regions в файле.";
+          return;
+        }
+
+        log.textContent += "Найдено регионов: " + Object.keys(regions).length + "\n";
+
+        Object.keys(regions).forEach(name => {
+          const reg = regions[name].value || regions[name];
+          const sizeX = reg.Size?.value?.x?.value || reg.Size?.x || reg.Size?.value?.[0]?.value || 0;
+          const sizeY = reg.Size?.value?.y?.value || reg.Size?.y || reg.Size?.value?.[1]?.value || 0;
+          const sizeZ = reg.Size?.value?.z?.value || reg.Size?.z || reg.Size?.value?.[2]?.value || 0;
+
+          log.textContent += `${name} → Размер: ${sizeX}×${sizeY}×${sizeZ}\n`;
+        });
+      });
+    });
+  </script>
+</body>
+</html>
