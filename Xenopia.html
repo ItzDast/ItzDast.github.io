@@ -36,15 +36,14 @@ ul{
     width: 100%;
     position: fixed;
     z-index: 2;
-    left: 50%;
-    transform: translate(-50%, -70px);
+    transform: translateY(-70px);
     backdrop-filter: blur(25px);
     border-bottom: 1px solid #282828;
     animation: movebottom 0.4s ease-in-out forwards;
 }
 @keyframes movebottom{
   to {
-    transform: translate(-50%, 0px);
+    transform: translateY(0px);
   }
 }
 .ItzDastSdelal{
@@ -791,7 +790,7 @@ ul{
 <script>
 
 let usernamepromptudlitpotom;
-usernamepromptudlitpotom = prompt("ник свой напиши");
+usernamepromptudlitpotom = prompt("Это тестовая фигня потом удалю\n\nник свой напиши");
 let username = document.getElementById('UserName').textContent;
 const a = document.getElementById("UserName");
 a.textContent = usernamepromptudlitpotom;
@@ -864,4 +863,3 @@ document.addEventListener("DOMContentLoaded", () => {
 </body>
 </html>
 <!-- https://images-ext-1.discordapp.net/external/qeEw3ntn_VadF-JjYvaKUm6Twjvst1AVPSiWV1AjS3I/https/media.tenor.com/COAxqocDdU8AAAPo/zrya.mp4 -->
-
