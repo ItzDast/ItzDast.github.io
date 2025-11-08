@@ -37,9 +37,15 @@ ul{
     position: fixed;
     z-index: 2;
     left: 50%;
-    transform: translate(-50%, 0%);
+    transform: translate(-50%, -70px);
     backdrop-filter: blur(25px);
     border-bottom: 1px solid #282828;
+    animation: movebottom 0.4s ease-in-out forwards;
+}
+@keyframes movebottom{
+  to {
+    transform: translate(-50%, 0px);
+  }
 }
 .ItzDastSdelal{
     width: 1440px;
@@ -103,7 +109,6 @@ ul{
     position: relative;
     overflow: hidden;
 }
-
 .d4::before {
     content: "";
     position: absolute;
@@ -116,12 +121,6 @@ ul{
 .d4:hover::before {
     transform: translateY(0);
 }
-
-.d4 > * {
-    position: relative;
-    z-index: 1;
-}
-
 .d4 a{
     text-decoration: none;
 }
@@ -158,7 +157,6 @@ ul{
     line-height: 29.26px;
     text-align: center;
     position: relative;
-    z-index: 1;
     margin: 275px auto 0px;
 }
 .d6{
@@ -413,6 +411,10 @@ ul{
     margin: 0px 0px 21px 14px;
     display: flex;
 }
+.d37 a{
+    width: 62px;
+    height: 62px;
+}
 .d38{
     height: 40px;
     margin: 12px 13px;
@@ -587,14 +589,14 @@ ul{
           <li><a href="https://ru.minecraft.wiki/">Wiki</a></li>
         </ul>
         <div class="a1" tabindex="0">
-          <img src="https://s.namemc.com/2d/skin/face.png?id=5e982b66eb4aff9c&scale=4" class="im2">
+          <img class="im2" id="head" alt="player head">
           <div class="submenu">
             <div class="d37">
               <a href="#">
-                <img src="https://s.namemc.com/2d/skin/face.png?id=5e982b66eb4aff9c&scale=4" class="im4">
+                <img class="im4" id="head2" alt="player head">
               </a>
               <div class="d38">
-                <div class="d39 d40">ItzDast</div>
+                <div class="d39 d40" id="UserName">ItzDast</div>
                 <div class="d39 d41">на сервере</div>
               </div>
             </div>
@@ -787,6 +789,17 @@ ul{
     </div>
   </div>
 <script>
+
+let usernamepromptudlitpotom;
+usernamepromptudlitpotom = prompt("Введите ваше имя пользователя:");
+let username = document.getElementById('UserName').textContent;
+const a = document.getElementById("UserName");
+a.textContent = usernamepromptudlitpotom;
+console.log(username);
+let HeadUrl = `https://minotar.net/helm/${usernamepromptudlitpotom}/256.png`;
+document.getElementById("head").src = HeadUrl;
+document.getElementById("head2").src = HeadUrl;
+
 document.addEventListener("DOMContentLoaded", () => {
   const logoutLink = document.querySelector('.submenu a.d45');
   const a1 = document.querySelector('.a1');
